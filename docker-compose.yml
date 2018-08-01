@@ -4,3 +4,29 @@ services:
     build: ./nginx
     ports:
       - "80:80"
+    volumes:
+      - tmp-data:/api/tmp
+    depends_on:
+      - api
+  db:
+    image: mysql:5.7.22
+    ports:
+      - "3306:3306"
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_USER: test
+        MYSQL_PASSWORD: test
+        MYSQL_DATABASE: sample
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - db-data:/var/lib/mysql
+  api:
+    build: ./puma
+    volumes:
+      - tmp-data:/api/tmp
+    depends_on:
+      - db
+volumes:
+  tmp-data:
+  db-data:
+    driver: local

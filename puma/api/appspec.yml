@@ -1,0 +1,44 @@
+version: 0.0
+os: linux
+files:
+  - source: app
+    destination: /var/www/api/app
+  - source: bin
+    destination: /var/www/api/bin
+  - source: config
+    destination: /var/www/api/config
+  - source: db
+    destination: /var/www/api/db
+  - source: lib
+    destination: /var/www/api/lib
+  - source: public
+    destination: /var/www/api/public
+  - source: scripts
+    destination: /var/www/api/scripts
+  - source: .ruby-version
+    destination: /var/www/api
+  - source: appspec.yml
+    destination: /var/www/api
+  - source: config.ru
+    destination: /var/www/api
+  - source: Gemfile
+    destination: /var/www/api
+  - source: Gemfile.lock
+    destination: /var/www/api
+  - source: package.json
+    destination: /var/www/api
+  - source: Rakefile
+    destination: /var/www/api
+hooks:
+  BeforeInstall:
+    - location: scripts/before_install.sh
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: scripts/start_server.sh
+      timeout: 300
+      runas: root
+  ApplicationStop:
+    - location: scripts/stop_server.sh
+      timeout: 300
+      runas: root

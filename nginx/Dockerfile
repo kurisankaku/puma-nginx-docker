@@ -38,12 +38,16 @@ RUN apk --update add pcre-dev openssl-dev zlib-dev gcc curl gd-dev libxml2-dev l
   && make install \
   && ln -sf /dev/stdout /var/log/nginx/access.log \
   && ln -sf /dev/stderr /var/log/nginx/error.log \
-  && mkdir mkdir /var/lib/nginx \
+  && mkdir /var/lib/nginx \
   && cd / \
   && apk del build-dependencies \
   && rm -rf \
        nginx-${NGINX_VERSION} \
        nginx-${NGINX_VERSION}.tar.gz \
-       /var/cache/apk/*
+       /var/cache/apk/* \
+  && mkdir -p /var/www/front
+COPY ./nginx* /etc/nginx/conf/
+COPY ./health.txt /usr/share/nginx/html/
+COPY ./front /var/www/front/
 EXPOSE 80 443
 CMD ["nginx", "-g", "daemon off;"]
